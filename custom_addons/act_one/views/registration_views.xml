@@ -7,6 +7,7 @@
             <field name="model">registration</field>
             <field name="arch" type="xml">
                 <search string="Search Registrations">
+                    <field name="serial_number"/>
                     <field name="trainee_id"/>
                     <field name="course_id"/>
                 </search>
@@ -14,8 +15,8 @@
         </record>
 
         
-        <record id="view_registration_list_enhanced" model="ir.ui.view">
-            <field name="name">registration.list.enhanced</field>
+        <record id="view_registration_list" model="ir.ui.view">
+            <field name="name">registration.list</field>
             <field name="model">registration</field>
             <field name="arch" type="xml">
                 <list string="Registration Requests" 
@@ -101,6 +102,16 @@
             <field name="name">Registration</field>
             <field name="res_model">registration</field>
             <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_registration_search"/>
+        </record>
+
+        <record id="action_my_courses" model="ir.actions.act_window">
+            <field name="name">My Courses</field>
+            <field name="res_model">registration</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('trainee_id', '=', uid)]</field>
+            <field name="context">{'create': False, 'edit': False, 'delete': False}</field>
+            <field name="view_id" ref="act_one.view_my_courses_list"/>
         </record>
     </data>
 </odoo>
