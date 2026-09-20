@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_registration_search" model="ir.ui.view">
+            <field name="name">registration.search</field>
+            <field name="model">registration</field>
+            <field name="arch" type="xml">
+                <search string="Search Registrations">
+                    <field name="trainee_id"/>
+                    <field name="course_id"/>
+                </search>
+            </field>
+        </record>
+
+        
+        <record id="view_registration_list_enhanced" model="ir.ui.view">
+            <field name="name">registration.list.enhanced</field>
+            <field name="model">registration</field>
+            <field name="arch" type="xml">
+                <list string="Registration Requests" 
+                      decoration-muted="state == 'draft'" 
+                      decoration-warning="state == 'teacher'" 
+                      decoration-success="state == 'approved'" 
+                      decoration-danger="state == 'rejected'">
+                    
+                    <field name="serial_number"/>
+                    <field name="trainee_id" string="Trainee Name"/>
+                    <field name="job_position" optional="show"/>
+                    <field name="course_id" string="Course Target"/>
+                    <field name="teacher_id"/>
+                    <field name="start_date"/>
+                    
+                    <field name="state" 
+                           widget="badge" 
+                           decoration-muted="state == 'draft'" 
+                           decoration-warning="state == 'teacher'" 
+                           decoration-success="state == 'approved'" 
+                           decoration-danger="state == 'rejected'"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_registration_form" model="ir.ui.view">
+            <field name="name">registration.form</field>
+            <field name="model">registration</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_confirm" string="Confirm" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                        <button name="action_approve" string="Approve" type="object" class="oe_highlight" invisible="state != 'teacher'"
+                            groups="act_one.group_training_teacher"/>
+                        <button name="action_reject" string="Reject" type="object" class="btn-secondary" invisible="state != 'teacher'"
+                            groups="act_one.group_training_teacher"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,teacher,approved,rejected"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="serial_number"/>
+                            <field name="name"/>    
+                            <field name="trainee_id" readonly="state != 'draft'"/>
+                            <field name="job_position" readonly="state != 'draft'"/>
+                            <field name="trainee_joining_date" groups="act_one.group_training_hr"/>
+                            <field name="trainee_joining_date" groups="!act_one.group_training_hr" readonly="1" force_save="1"/>
+                            <field name="course_id"/>
+                            <field name="course_description"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="number_of_days"/>
+                            <field name="time" widget="float_time"/>
+                            <field name="room_id"/>
+                            <field name="location_id"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_my_courses_list" model="ir.ui.view">
+            <field name="name">registration.my.courses.list</field>
+            <field name="model">registration</field>
+            <field name="arch" type="xml">
+                <list string="My Enrolled Courses">
+                    
+                    <field name="serial_number"/>
+                    <field name="course_id" string="Course Name"/>
+                    <field name="teacher_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="number_of_days"/>
+                    <field name="time"/>
+                    <field name="room_id"/>
+                    <field name="location_id"/>
+                    <field name="state" widget="badge"/>
+                    
+                </list>
+            </field>
+        </record>
+
+        <record id="registration_model_action" model="ir.actions.act_window">
+            <field name="name">Registration</field>
+            <field name="res_model">registration</field>
+            <field name="view_mode">list,form</field>
+        </record>
+    </data>
+</odoo>

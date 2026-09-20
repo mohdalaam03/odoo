@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="rule_reg_personal" model="ir.rule">
+            <field name="name">Trainee: Personal Registrations Only</field>
+            <field name="model_id" ref="model_registration"/>
+            <field name="groups" eval="[(4, ref('act_one.group_training_requester'))]"/>
+            <field name="domain_force">[('trainee_id', '=', user.id)]</field>
+        </record>
+
+        <record id="rule_reg_teacher" model="ir.rule">
+            <field name="name">Teacher: Mapped Course Registrations Only</field>
+            <field name="model_id" ref="model_registration"/>
+            <field name="groups" eval="[(4, ref('act_one.group_training_teacher'))]"/>
+            <field name="domain_force">[('course_id.teacher_id.user_id', '=', user.id)]</field>
+        </record>
+
+        <record id="rule_reg_hr" model="ir.rule">
+            <field name="name">HR: Global Visibility Oversight</field>
+            <field name="model_id" ref="model_registration"/>
+            <field name="groups" eval="[(4, ref('act_one.group_training_hr'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+    </data>
+</odoo>

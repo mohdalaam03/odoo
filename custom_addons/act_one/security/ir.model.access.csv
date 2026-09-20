@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_loc_all,access.loc.all,model_location,base.group_user,1,1,1,1
+access_room_all,access.room.all,model_room,base.group_user,1,1,1,1
+access_teach_all,access.teach.all,model_teacher,base.group_user,1,1,1,1
+access_reg_req,access.reg.req,model_registration,act_one.group_training_requester,1,1,1,0
+access_reg_teach,access.reg.teach,model_registration,act_one.group_training_teacher,1,1,1,0
+access_reg_hr,access.reg.hr,model_registration,act_one.group_training_hr,1,1,1,1
+access_course_req,access.course.req,model_course,act_one.group_training_requester,1,0,0,0
+access_course_teach,access.course.teach,model_course,act_one.group_training_teacher,1,0,0,0
+access_course_hr,access.course.hr,model_course,act_one.group_training_hr,1,1,1,1

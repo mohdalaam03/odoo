@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_registration_details" model="ir.actions.report">
+        <field name="name">Print Registration Details</field>
+        <field name="model">registration</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">act_one.report_registration_template</field>
+        <field name="report_file">act_one.report_registration_template</field>
+        <field name="binding_model_id" ref="model_registration"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_registration_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.basic_layout">
+                    
+                    <div class="header" style="font-family: 'Arial', sans-serif; margin: 0; padding: 100px; width: 100%; display: block; clear: both; box-sizing: border-box;">
+                        <div style="float: left; font-size: 13px; font-weight: bold; color: #000; margin: 0; padding-bottom: 5px; padding-left: 10px;">
+                            Company Logo
+                        </div>
+                        <div style="float: right; font-size: 13px; font-weight: bold; color: #000; margin: 0; padding-bottom: 5px; padding-right: 10px;" 
+                             t-out="datetime.date.today().strftime('%d/%m/%Y')"/>
+                        
+                        <div style="border-top: 2px solid #000; width: 100%; clear: both; margin-top: 40px; padding-top: 5px;"/>
+                    </div>
+
+                    <div class="page" style="font-family: 'Arial', sans-serif; font-size: 13px; color: #000; padding: 30px 45px 0 45px; box-sizing: border-box;">
+                        
+                        <div style="text-align: center; margin-bottom: 15px; margin-top: 30px;">
+                            <h2 style="color: #245775; font-size: 24px; font-weight: bold; margin: 0;">Internal Training Details</h2>
+                        </div>
+
+                        <div style="width: 100%; margin-bottom: 35px; display: table;">
+                            <div style="display: table-row;">
+                                <div style="display: table-cell; width: 50%; font-size: 13px;">
+                                    <strong>Trainee Name:</strong> <span style="margin-left: 8px;" t-field="doc.trainee_id.name"/>
+                                </div>
+                                <div style="display: table-cell; width: 50%; font-size: 13px; padding-left: 40px;">
+                                    <strong>Job Position:</strong> <span style="margin-left: 8px;" t-field="doc.job_position"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <table style="width: 100%; border-collapse: collapse; box-sizing: border-box;">
+                            <tbody>
+                                <tr>
+                                    <td style="border: 1px solid #7f7f7f; padding: 12px 10px; width: 25%; background-color: #d9d9d9; font-size: 13px;"><strong>Serial Number:</strong></td>
+                                    <td style="border: 1px solid #7f7f7f; padding: 12px 10px; width: 75%; background-color: #ffffff;" colspan="3"><span t-field="doc.serial_number"/></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td style="border: 1px solid #7f7f7f; padding: 12px 10px; background-color: #d9d9d9; font-size: 13px;"><strong>Course Name:</strong></td>
+                                    <td style="border: 1px solid #7f7f7f; padding: 12px 10px; background-color: #ffffff;" colspan="3"><span t-field="doc.course_id.name"/></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td style="border: 1px solid #7f7f7f; padding: 12px 10px; background-color: #d9d9d9; font-size: 13px;"><strong>Course Description:</strong></td>
+                                    <td style="border: 1px solid #7f7f7f; padding: 12px 10px; background-color: #ffffff;" colspan="3"><span t-field="doc.course_description"/></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td style="border: 1px solid #7f7f7f; padding: 12px 10px; background-color: #d9d9d9; font-size: 13px; width: 25%;"><strong>Teacher Name:</strong></td>
+                                    <td style="border: 1px solid #7f7f7f; padding: 12px 10px; background-color: #ffffff; width: 25%;"><span t-field="doc.teacher_id.name"/></td>
+                                    <td style="border: 1px solid #7f7f7f; padding: 12px 10px; background-color: #d9d9d9; font-size: 13px; width: 25%;"><strong>Time:</strong></td>
+                                    <td style="border: 1px solid #7f7f7f; padding: 12px 10px; background-color: #ffffff; width: 25%;">
+                                        <span t-out="'{:02d}:{:02d}'.format(int(doc.time), int(round((doc.time - int(doc.time)) * 60)))"/>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td style="border: 1px solid #7f7f7f; padding: 12px 10px; background-color: #d9d9d9; font-size: 13px;"><strong>Start Date:</strong></td>
+                                    <td style="border: 1px solid #7f7f7f; padding: 12px 10px; background-color: #ffffff;"><span t-field="doc.start_date"/></td>
+                                    <td style="border: 1px solid #7f7f7f; padding: 12px 10px; background-color: #d9d9d9; font-size: 13px; width: 25%;"><strong>End Date:</strong></td>
+                                    <td style="border: 1px solid #7f7f7f; padding: 12px 10px; background-color: #ffffff;"><span t-field="doc.end_date"/></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td style="border: 1px solid #7f7f7f; padding: 12px 10px; background-color: #d9d9d9; font-size: 13px;"><strong>Room Number:</strong></td>
+                                    <td style="border: 1px solid #7f7f7f; padding: 12px 10px; background-color: #ffffff;"><span t-field="doc.room_id.name"/></td>
+                                    <td style="border: 1px solid #7f7f7f; padding: 12px 10px; background-color: #d9d9d9; font-size: 13px; width: 25%;"><strong>Course Location:</strong></td>
+                                    <td style="border: 1px solid #7f7f7f; padding: 12px 10px; background-color: #ffffff;"><span t-field="doc.location_id.name"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="footer" style="font-family: 'Arial', sans-serif; font-weight: bold; font-size: 11px; color: #555; padding: 0 45px; width: 100%; box-sizing: border-box; clear: both;">
+                        <div style="float: right; margin: 0;">
+                            Page <span class="page"/> of <span class="topage"/>
+                        </div>
+                    </div>
+
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
