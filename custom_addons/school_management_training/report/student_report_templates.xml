@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- =================================================================
+    STUDENT REPORT TEMPLATES
+    ================================================================== -->
+    <!--
+    Report templates define how printed/PDF reports look.
+    
+    Concepts covered:
+    - QWeb templating
+    - Report header/footer
+    - Tables and loops
+    - Conditional content
+    - Styling with Bootstrap
+    -->
+    
+    <!-- Student Report Card Template -->
+    <template id="report_student_card">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="student">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 class="text-center">Student Report Card</h2>
+                        
+                        <div class="row mt-4">
+                            <div class="col-2 mb-2">
+                                <strong>Student:</strong>
+                                <span t-field="student.display_name"/>
+                            </div>
+                            <div class="col-2 mb-2">
+                                <strong>Student Code:</strong>
+                                <span t-field="student.student_code"/>
+                            </div>
+                            <!-- TODO: Add more student information -->
+                            <!-- Date of birth, Guardian, etc. -->
+                            <div class="col-2 mb-2">
+                                <strong>Date of Birth:</strong>
+                                <span t-field="student.date_of_birth" t-options="{'widget': 'date'}"/>
+                            </div>
+                            <div class="col-2 mb-2">
+                                <strong>Age:</strong>
+                                <span t-field="student.age"/>
+                            </div>
+                            <div class="col-2 mb-2">
+                                <strong>Guardian / Contact:</strong>
+                                <span t-field="student.guardian_id"/>
+                            </div>
+                            <div class="col-2 mb-2">
+                                <strong>Status:</strong>
+                                <span t-field="student.state" class="text-uppercase fw-bold text-muted"/>
+                            </div>
+                        </div>
+                        
+                        <h4 class="mt-4">Enrolled Courses</h4>
+                        <!-- TODO: Add table of enrollments -->
+                        <!--
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Course</th>
+                                    <th>Teacher</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="student.enrollment_ids" t-as="enrollment">
+                                    <tr>
+                                        <td t-field="enrollment.course_id"/>
+                                        <td t-field="enrollment.teacher_id"/>
+                                        <td t-field="enrollment.state"/>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        -->
+
+                        <table class="table table-sm table-striped">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>Course</th>
+                                    <th>Teacher</th>
+                                    <th>Enrollment Date</th>
+                                    <th class="text-end">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="student.enrollment_ids" t-as="enrollment">
+                                    <tr>
+                                        <td><span t-field="enrollment.course_id.name"/></td>
+                                        <td><span t-field="enrollment.teacher_id.name"/></td>
+                                        <td><span t-field="enrollment.enrollment_date"/></td>
+                                        <td class="text-end text-capitalize"><span t-field="enrollment.state"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        
+                        <h4 class="mt-4">Grades</h4>
+                        <!-- TODO: Add table of grades -->
+                        <table class="table table-sm table-striped">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Course</th>
+                                    <th>Assessment Type</th>
+                                    <th class="text-end">Score</th>
+                                    <th class="text-end">Max Score</th>
+                                    <th class="text-end">Grade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="student.grade_ids" t-as="grade">
+                                    <tr>
+                                        <td><span t-field="grade.date"/></td>
+                                        <td><span t-field="grade.course_id.name"/></td>
+                                        <td class="text-capitalize"><span t-field="grade.grade_type"/></td>
+                                        <td class="text-end"><span t-field="grade.score"/></td>
+                                        <td class="text-end"><span t-field="grade.max_score"/></td>
+                                        <td class="text-end fw-bold"><span t-field="grade.letter_grade"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        
+                        <h4 class="mt-4">Summary</h4>
+                        <div class="row">
+                            <div class="col-4">
+                                <strong>Average Grade:</strong>
+                                <!-- TODO: Add average_grade field -->
+                                <span class="fs-4 fw-bold text-success" t-field="student.average_grade"/>
+                            </div>
+                            <div class="col-4">
+                                <strong>Attendance Rate:</strong>
+                                <!-- TODO: Add attendance_rate field -->
+                                <span class="fs-4 fw-bold text-info">
+                                    <t t-esc="round(student.attendance_rate, 1)"/>%
+                                </span>
+                            </div>
+                            <div class="col-4">
+                                <strong>Total Courses:</strong>
+                                <!-- TODO: Add total_courses field -->
+                                <span class="fs-4 fw-bold text-dark" t-field="student.total_courses"/>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+    
+    
+    <!-- Student List Report Template -->
+    <template id="report_student_list">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2 class="text-center">Student List</h2>
+                    <p class="text-center text-muted">
+                        Generated on <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
+                    </p>
+                    
+                    <table class="table table-sm table-striped">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Name</th>
+                                <!-- TODO: Add more columns -->
+                                <th>Email</th>
+                                <th>Age</th>
+                                <th> Average Grade</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="docs" t-as="student">
+                                <tr>
+                                    <td><span t-field="student.student_code"/></td>
+                                    <td><span t-field="student.display_name"/></td>
+                                    <!-- TODO: Add more fields -->
+                                    <td>
+                                        <span t-if="student.email" t-field="student.email"/>
+                                        <span t-else="" class="text-muted small">N/A</span>
+                                    </td>
+                                    <td class="text-center"><span t-field="student.age"/></td>
+                                    <td class="text-end">
+                                        <t t-if="student.average_grade">
+                                            <span t-field="student.average_grade" t-options="{'widget': 'float', 'precision': 2}"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="text-muted small">No Grades</span>
+                                        </t>
+                                    </td>
+                                    <td class="text-center text-capitalize font-weight-bold">
+                                        <span t-field="student.state"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    
+                    <div class="mt-4">
+                        <strong>Total Students:</strong>
+                        <span t-esc="len(docs)"/>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+    
+        <!-- Course Report Template -->
+    <template id="report_course_detail">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="course">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <!-- Upper Header Branding -->
+                        <h2 class="text-center text-primary fw-bold" t-field="course.name"/>
+                        <p class="text-center text-muted fw-bold">
+                            Code: <span t-field="course.code"/> | Status: <span t-field="course.state" class="text-uppercase"/>
+                        </p>
+                        
+                        <!-- TODO: Complete the course report template -->
+                        <!-- Show course details, enrolled students, grade statistics -->
+                        <h4 class="mt-4 border-bottom pb-1 text-secondary">Course Details</h4>
+                        <div class="row mt-2">
+                            <div class="col-3 mb-2">
+                                <strong>Instructor:</strong>
+                                <span t-field="course.teacher_id"/>
+                            </div>
+                            <div class="col-3 mb-2">
+                                <strong>Category:</strong>
+                                <span t-field="course.category_id"/>
+                            </div>
+                            <div class="col-3 mb-2">
+                                <strong>Credits:</strong>
+                                <span t-field="course.credits"/>
+                            </div>
+                            <div class="col-3 mb-2">
+                                <strong>Level:</strong>
+                                <span t-field="course.level" class="text-capitalize"/>
+                            </div>
+                        </div>
+
+                        <div class="row bg-light p-3 my-3 rounded mx-0 border">
+                            <div class="col-4 text-center">
+                                <small class="text-muted d-block text-uppercase fw-bold">Maximum Capacity</small>
+                                <span class="fs-5 fw-bold" t-field="course.max_students"/>
+                            </div>
+                            <div class="col-4 text-center border-start border-end">
+                                <small class="text-muted d-block text-uppercase fw-bold">Enrolled Count</small>
+                                <span class="fs-5 fw-bold text-success" t-field="course.enrolled_count"/>
+                            </div>
+                            <div class="col-4 text-center">
+                                <small class="text-muted d-block text-uppercase fw-bold">Available Seats</small>
+                                <span t-attf-class="fs-5 fw-bold #{'text-danger' if course.is_full else 'text-primary'}" t-field="course.available_seats"/>
+                            </div>
+                        </div>
+
+                        <t t-if="course.prerequisite_ids">
+                            <h4 class="mt-4 border-bottom pb-1 text-secondary">Prerequisite Requirements</h4>
+                            <ul class="list-group list-group-flush mb-3">
+                                <t t-foreach="course.prerequisite_ids" t-as="prereq">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <span t-field="prereq.name"/>
+                                        <span class="badge text-bg-secondary"><span t-field="prereq.code"/></span>
+                                    </li>
+                                </t>
+                            </ul>
+                        </t>
+
+                        <h4 class="mt-4 border-bottom pb-1 text-secondary">Enrolled Students Roster</h4>
+                        <table class="table table-sm table-striped border mt-2">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th style="width: 20%;">Student Code</th>
+                                    <th style="width: 45%;">Name</th>
+                                    <th style="width: 20%;">Enrollment Date</th>
+                                    <th style="width: 15%;" class="text-end">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-if="course.enrollment_ids">
+                                    <t t-foreach="course.enrollment_ids" t-as="enrollment">
+                                        <tr>
+                                            <td class="fw-bold"><span t-field="enrollment.student_id.student_code"/></td>
+                                            <td><span t-field="enrollment.student_id.display_name"/></td>
+                                            <td><span t-field="enrollment.enrollment_date"/></td>
+                                            <td class="text-end text-capitalize"><span t-field="enrollment.state"/></td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                <t t-else="">
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted py-3">No active students currently enrolled in this course context.</td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <h4 class="mt-4 border-bottom pb-1 text-secondary">Academic Performance Summary</h4>
+                        <div class="row bg-light p-3 mt-2 rounded mx-0 border">
+                            <div class="col-6 text-center border-end">
+                                <small class="text-muted d-block text-uppercase fw-bold">Course Class Average</small>
+                                <span class="fs-4 fw-bold text-success">
+                                    <t t-if="course.average_grade">
+                                        <span t-field="course.average_grade" t-options="{'widget': 'float', 'precision': 2}"/>
+                                    </t>
+                                    <t t-else="">0.00</t>
+                                </span>
+                            </div>
+                            <div class="col-6 text-center">
+                                <small class="text-muted d-block text-uppercase fw-bold">Syllabus Progress</small>
+                                <span class="fs-4 fw-bold text-info">
+                                    <span t-field="course.progress_percentage" t-options="{'widget': 'float', 'precision': 1}"/>%
+                                </span>
+                            </div>
+                        </div>
+                    </div> 
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

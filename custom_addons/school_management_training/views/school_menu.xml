@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- =================================================================
+    MAIN MENU STRUCTURE
+    ================================================================== -->
+    <!--
+    Menu structure for the School Management module.
+    
+    Concepts covered:
+    - Root menu (application menu)
+    - Menu categories (submenus)
+    - Menu items linked to actions
+    - Menu sequence ordering
+    - Menu security (groups)
+    -->
+    
+    <!-- Root Menu (Application) -->
+    <menuitem id="menu_school_root"
+              name="School"
+              web_icon="school_management_training,static/description/icon.png"
+              sequence="100"/>
+    
+    <!-- =================================================================
+    STUDENTS MENU
+    ================================================================== -->
+    <menuitem id="menu_school_students"
+              name="Students"
+              parent="menu_school_root"
+              sequence="10"/>
+    
+    <menuitem id="menu_school_student_list"
+              name="Students"
+              parent="menu_school_students"
+              action="action_school_student"
+              sequence="10"/>
+    
+    <!-- TODO: Add menu item for student enrollment wizard -->
+    <record id="action_enrollment_wizard" model="ir.actions.act_window">
+        <field name="name">Enroll Students Batch</field>
+        <field name="res_model">school.enrollment.wizard</field> 
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_enrollment_wizard_action"
+              name="Batch Enrollment Wizard"
+              parent="menu_school_root" 
+              action="action_enrollment_wizard"
+              sequence="25"/>
+    
+    <!-- =================================================================
+    TEACHERS MENU
+    ================================================================== -->
+    <menuitem id="menu_school_teachers"
+              name="Teachers"
+              parent="menu_school_root"
+              sequence="20"/>
+    
+    <menuitem id="menu_school_teacher_list"
+              name="Teachers"
+              parent="menu_school_teachers"
+              action="action_school_teacher"
+              sequence="10"/>
+    
+    <!-- =================================================================
+    COURSES MENU
+    ================================================================== -->
+    <menuitem id="menu_school_courses"
+              name="Courses"
+              parent="menu_school_root"
+              sequence="30"/>
+    
+    <menuitem id="menu_school_course_list"
+              name="Courses"
+              parent="menu_school_courses"
+              action="action_school_course"
+              sequence="10"/>
+    
+    <menuitem id="menu_school_enrollment_list"
+              name="Enrollments"
+              parent="menu_school_courses"
+              action="action_school_enrollment"
+              sequence="20"/>
+    
+    <!-- =================================================================
+    ACADEMICS MENU
+    ================================================================== -->
+    <menuitem id="menu_school_academics"
+              name="Academics"
+              parent="menu_school_root"
+              sequence="40"/>
+    
+    <menuitem id="menu_school_grade_list"
+              name="Grades"
+              parent="menu_school_academics"
+              action="action_school_grade"
+              sequence="10"/>
+    
+    <menuitem id="menu_school_attendance_list"
+              name="Attendance"
+              parent="menu_school_academics"
+              action="action_school_attendance"
+              sequence="20"/>
+    
+    <!-- =================================================================
+    CONFIGURATION MENU
+    ================================================================== -->
+    <menuitem id="menu_school_configuration"
+              name="Configuration"
+              parent="menu_school_root"
+              groups="school_group_manager"
+              sequence="100"/>
+    
+    <menuitem id="menu_school_course_category"
+              name="Course Categories"
+              parent="menu_school_configuration"
+              action="action_school_course_category"
+              sequence="10"/>
+    
+    <menuitem id="menu_school_course_tag"
+              name="Course Tags"
+              parent="menu_school_configuration"
+              action="action_school_course_tag"
+              sequence="20"/>
+    
+    <!-- =================================================================
+    REPORTING MENU (Optional - for advanced trainees)
+    ================================================================== -->
+    <!--
+    TODO (Advanced): Add a reporting menu with:
+    - Grade Analysis (pivot view)
+    - Attendance Reports (graph view)
+    - Student Progress Dashboard
+    -->
+    
+</odoo>

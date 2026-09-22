@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- =================================================================
+    TEACHER VIEWS
+    ================================================================== -->
+    <!--
+    TODO: Complete the Teacher Views
+    
+    Similar structure to Student views but with teacher-specific fields.
+    -->
+    
+    <!-- Teacher List View -->
+    <record id="view_school_teacher_list" model="ir.ui.view">
+        <field name="name">school.teacher.list</field>
+        <field name="model">school.teacher</field>
+        <field name="arch" type="xml">
+            <list string="Teachers" multi_edit="1" sample="1">
+                <field name="employee_code" readonly="1"/>
+                <!-- TODO: Add fields: name, email, phone, department, hire_date -->
+                <field name="name"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="department"/>
+                <field name="hire_date"/>
+                <!-- TODO: Add total_courses, total_students as optional fields -->
+                <field name="total_courses" optional="show"/>
+                <field name="total_students" optional="hide"/>
+                
+                <field name="active" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- Teacher Form View -->
+    <record id="view_school_teacher_form" model="ir.ui.view">
+        <field name="name">school.teacher.form</field>
+        <field name="model">school.teacher</field>
+        <field name="arch" type="xml">
+            <form string="Teacher">
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger"
+                            invisible="active"/>
+                    
+                    <div class="oe_button_box" name="button_box">
+                        <!-- TODO: Add stat button for courses -->
+                        <button name="action_view_teacher_courses" type="object"
+                                class="oe_stat_button" icon="fa-chalkboard-teacher">
+                            <field name="total_courses" widget="statinfo" string="Courses"/>
+                        </button>
+                    </div>
+                    
+                    <!-- TODO: Add photo and title section similar to student -->
+                    <field name="photo" widget="image" class="oe_avatar" options="{'preview_image': 'photo'}"/>
+
+                    
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Teacher Full Name"/>
+                        </h1>
+                        <span class="text-muted fw-semibold">Employee Code: </span>
+                        <field name="employee_code" readonly="1" class="fw-bold"/>
+                    </div>
+
+                    <group>
+                        <group string="Personal Information">
+                            <field name="user_id" options="{'no_create': True}"/>
+                            <field name="employee_code"/>
+                            <!-- TODO: Add name, email, phone, date_of_birth -->
+                            <field name="email"/>
+                            <field name="phone"/>
+                            <field name="date_of_birth"/>
+                        </group>
+                        <group string="Employment Information">
+                            <!-- TODO: Add hire_date, department, qualification -->
+                            <field name="hire_date"/>
+                            <field name="department"/>
+                            <field name="qualification" placeholder="e.g. Master's in Mathematics"/>
+                            <!-- TODO: Add salary with currency_id -->
+                            <field name="currency_id" invisible="1"/>
+                            <field name="salary" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Courses" name="courses">
+                            <!-- TODO: Add course_ids One2many -->
+                            <field name="course_ids" readonly="1">
+                                <list string="Assigned Courses">
+                                    <field name="code"/>
+                                    <field name="name"/>
+                                    <field name="state" widget="badge" 
+                                           decoration-info="state == 'planned'" 
+                                           decoration-success="state == 'in_progress'"
+                                           decoration-muted="state == 'completed'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Biography" name="biography">
+                            <!-- TODO: Add biography Html field -->
+                            <field name="biography" widget="html" nolabel="1" placeholder="Describe the instructor's background, past publications, or research background summaries..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Teacher Search View -->
+    <record id="view_school_teacher_search" model="ir.ui.view">
+        <field name="name">school.teacher.search</field>
+        <field name="model">school.teacher</field>
+        <field name="arch" type="xml">
+            <search string="Search Teachers">
+                <field name="employee_code"/>
+                <!-- TODO: Add more search fields -->
+                <field name="name" string="Teacher Name"/>
+                <field name="employee_code" string="Employee Code"/>
+                <field name="email" string="Email Address"/>
+                <field name="department" string="Department"/>
+                <field name="qualification" string="Qualification"/>
+                <separator/>
+                
+                <filter name="filter_inactive" string="Archived" 
+                        domain="[('active', '=', False)]"/>
+                
+                <!-- TODO: Add group by options -->
+                <group expand="0" string="Group By">
+                    <filter name="groupby_department" string="Department" 
+                            context="{'group_by': 'department'}"/>
+                    <filter name="groupby_qualification" string="Qualification Level" 
+                            context="{'group_by': 'qualification'}"/>
+                    <filter name="groupby_hire_date" string="Hire Date" 
+                            context="{'group_by': 'hire_date:year'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Teacher Action -->
+    <record id="action_school_teacher" model="ir.actions.act_window">
+        <field name="name">Teachers</field>
+        <field name="res_model">school.teacher</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_school_teacher_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first teacher!
+            </p>
+        </field>
+    </record>
+</odoo>

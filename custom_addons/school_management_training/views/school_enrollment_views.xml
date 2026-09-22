@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- =================================================================
+    ENROLLMENT VIEWS
+    ================================================================== -->
+    
+    <!-- Enrollment List View -->
+    <record id="view_school_enrollment_list" model="ir.ui.view">
+        <field name="name">school.enrollment.list</field>
+        <field name="model">school.enrollment</field>
+        <field name="arch" type="xml">
+            <list string="Enrollments" multi_edit="1" sample="1"
+                  decoration-info="state == 'pending'"
+                  decoration-success="state == 'confirmed'"
+                  decoration-muted="state in ('completed', 'cancelled', 'dropped')">
+                <!-- TODO: Add fields -->
+                <!-- student_id, course_id, enrollment_date, state -->
+                <!-- teacher_id (related), priority -->
+                <field name="student_id"/>
+                <field name="course_id"/>
+                <field name="enrollment_date"/>
+                <field name="state" widget="badge"/>
+                <field name="teacher_id"/>
+                <field name="priority"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- Enrollment Form View -->
+    <record id="view_school_enrollment_form" model="ir.ui.view">
+        <field name="name">school.enrollment.form</field>
+        <field name="model">school.enrollment</field>
+        <field name="arch" type="xml">
+            <form string="Enrollment">
+                <header>
+                    <!-- TODO: Add state transition buttons -->
+                    <!-- action_submit, action_approve, action_complete -->
+                    <!-- action_cancel, action_drop, action_reset_draft -->
+                    <button name="action_submit" string="Submit" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_approve" string="Approve" type="object" class="oe_highlight" invisible="state != 'pending'"/>
+                    <button name="action_complete" string="Mark Completed" type="object" class="oe_highlight" invisible="state != 'confirmed'"/>
+                    
+                    <button name="action_cancel" string="Cancel" type="object" invisible="state not in ('pending', 'confirmed')"/>
+                    <button name="action_drop" string="Drop Course" type="object" class="btn-danger" invisible="state != 'confirmed'"/>
+                    <button name="action_reset_draft" string="Reset to Draft" type="object" invisible="state not in ('cancelled', 'dropped')"/>
+                    
+                    <!-- TODO: Add state statusbar -->
+                    <field name="state" widget="statusbar" statusbar_visible="draft,pending,confirmed,completed"/>
+                </header>
+                
+                <sheet>
+                    <group>
+                        <group string="Enrollment Details">
+                            <!-- TODO: Add student_id, course_id -->
+                            <!-- TODO: Add enrollment_date, completion_date -->
+                            <field name="student_id" options="{'no_create': True}"/>
+                            <field name="course_id" options="{'no_create': True}"/>
+                            <field name="enrollment_date"/>
+                            <field name="completion_date" invisible="not completion_date" readonly="1"/>
+                        </group>
+                        <group string="Additional Info">
+                            <!-- TODO: Add teacher_id (readonly), priority -->
+                            <!-- TODO: Add is_active, duration_days (readonly) -->
+                            <field name="teacher_id" readonly="1"/>
+                            <field name="priority" widget="priority"/>
+                            <field name="is_active" widget="boolean_toggle"/>
+                            <field name="duration_days" readonly="1"/>
+                        
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <!-- TODO: Add notes field -->
+                        <field name="notes" placeholder="Add custom enrollment or academic registration logs here..." nolabel="1"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Enrollment Search View -->
+    <record id="view_school_enrollment_search" model="ir.ui.view">
+        <field name="name">school.enrollment.search</field>
+        <field name="model">school.enrollment</field>
+        <field name="arch" type="xml">
+            <search string="Search Enrollments">
+                <!-- TODO: Add search fields for student_id, course_id -->
+                <field name="student_id" string="Student Name"/>
+                <field name="course_id" string="Course Title"/>
+                
+                <separator/>
+                <!-- TODO: Add filters for state -->
+                <filter string="Pending Approval" name="filter_pending" domain="[('state', '=', 'pending')]"/>
+                <filter string="Confirmed / Active" name="filter_confirmed" domain="[('state', '=', 'confirmed')]"/>
+                <filter string="Completed Courses" name="filter_completed" domain="[('state', '=', 'completed')]"/>
+                <filter string="Currently Active" name="filter_is_active" domain="[('is_active', '=', True)]"/>
+                
+                <separator/>
+                <!-- TODO: Add group by options -->
+                <group expand="0" string="Group By">
+                    <filter string="Student" name="group_by_student" context="{'group_by': 'student_id'}"/>
+                    <filter string="Course" name="group_by_course" context="{'group_by': 'course_id'}"/>
+                    <filter string="Status / Stage" name="group_by_state" context="{'group_by': 'state'}"/>
+                    <filter string="Enrollment Date" name="group_by_date" context="{'group_by': 'enrollment_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Enrollment Action -->
+    <record id="action_school_enrollment" model="ir.actions.act_window">
+        <field name="name">Enrollments</field>
+        <field name="res_model">school.enrollment</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_school_enrollment_search"/>
+        <field name="context">{'search_default_filter_confirmed': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first enrollment!
+            </p>
+            <p>
+                Enrollments link students to courses. Use the Bulk Enrollment wizard for multiple students.
+            </p>
+        </field>
+    </record>
+</odoo>

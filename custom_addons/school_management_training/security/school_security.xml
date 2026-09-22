@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- =================================================================
+        SECURITY GROUPS
+        ================================================================== -->
+        <!-- 
+        TODO 1: Define Security Groups Hierarchy
+        
+        Create the following groups:
+        - school_group_user: Basic user (can view records)
+        - school_group_teacher: Teacher (can manage own courses)
+        - school_group_manager: Manager (full access)
+        
+        The hierarchy should be:
+        manager > teacher > user
+        
+        Hint: Use 'implied_ids' to establish hierarchy
+        -->
+        
+        <record id="module_category_school_management" model="ir.module.category">
+            <field name="name">School Management</field>
+            <field name="description">Access levels for the School Management System.</field>
+            <field name="sequence">30</field>
+        </record>
+
+        <!-- 1. Basic User Group (Can view records) -->
+        <record id="school_group_user" model="res.groups">
+            <field name="name">User</field>
+            <field name="category_id" ref="module_category_school_management"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <!-- 2. Teacher Group (Can manage own courses) -->
+        <record id="school_group_teacher" model="res.groups">
+            <field name="name">Teacher</field>
+            <field name="category_id" ref="module_category_school_management"/>
+            <field name="implied_ids" eval="[(4, ref('school_group_user'))]"/>
+        </record>
+
+        <!-- 3. Manager Group (Full access) -->
+        <record id="school_group_manager" model="res.groups">
+            <field name="name">Manager</field>
+            <field name="category_id" ref="module_category_school_management"/>
+            <field name="implied_ids" eval="[(4, ref('school_group_teacher'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+
+        <!-- Category for school groups -->
+        <record id="module_category_school" model="ir.module.category">
+            <field name="name">School Management</field>
+            <field name="description">User access levels for School Management module</field>
+            <field name="sequence">10</field>
+        </record>
+        
+        <!-- School User Group -->
+        <record id="school_group_user" model="res.groups">
+            <field name="name">User</field>
+            <field name="category_id" ref="module_category_school"/>
+            <field name="comment">Can view students, courses, and basic information</field>
+        </record>
+        
+        <!-- School Teacher Group -->
+        <record id="school_group_teacher" model="res.groups">
+            <field name="name">Teacher</field>
+            <field name="category_id" ref="module_category_school"/>
+            <field name="implied_ids" eval="[(4, ref('school_group_user'))]"/>
+            <field name="comment">Can manage own courses, grades, and attendance</field>
+        </record>
+        
+        <!-- School Manager Group -->
+        <record id="school_group_manager" model="res.groups">
+            <field name="name">Manager</field>
+            <field name="category_id" ref="module_category_school"/>
+            <field name="implied_ids" eval="[(4, ref('school_group_teacher'))]"/>
+            <field name="comment">Full access to all school management features</field>
+        </record>
+        
+        
+        <!-- =================================================================
+        RECORD RULES
+        ================================================================== -->
+        <!--
+        TODO 2: Define Record Rules
+        
+        Create the following rules:
+        
+        2.1 Student Rules:
+        - Users can view all students
+        - Teachers can view/edit students in their courses
+        - Managers have full access
+        
+        2.2 Course Rules:
+        - Users can view all courses
+        - Teachers can edit only their own courses
+        - Managers have full access
+        
+        2.3 Grade Rules:
+        - Users cannot access grades
+        - Teachers can manage grades for their courses
+        - Managers have full access
+        
+        2.4 Enrollment Rules:
+        - Similar to student rules
+        -->
+        
+        <!-- Example: Students - Manager Full Access -->
+        <record id="school_student_rule_manager" model="ir.rule">
+            <field name="name">School Student: Manager Full Access</field>
+            <field name="model_id" ref="model_school_student"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('school_group_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+        
+        <!-- TODO: Add remaining record rules -->
+        
+        <!-- Course Rules -->
+        <record id="school_course_rule_user_read" model="ir.rule">
+            <field name="name">School Course: User Read</field>
+            <field name="model_id" ref="model_school_course"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('school_group_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+        
+        <!-- =================================================================
+             2.1 STUDENT RECORD RULES
+             ================================================================== -->
+        <!-- User Read Access (Global view) -->
+        <record id="school_student_rule_user_read" model="ir.rule">
+            <field name="name">School Student: User Read All</field>
+            <field name="model_id" ref="model_school_student"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('school_group_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- Teacher Edit Access (Only students enrolled in their courses) -->
+        <record id="school_student_rule_teacher_manage" model="ir.rule">
+            <field name="name">School Student: Teacher Manage Assigned</field>
+            <field name="model_id" ref="model_school_student"/>
+            <!-- Path: Student -> Linked Enrollment -> Enrollment Course -> Course Teacher User ID -->
+            <field name="domain_force">[('enrollment_ids.course_id.teacher_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('school_group_teacher'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+
+        <!-- =================================================================
+             2.2 COURSE RECORD RULES
+             ================================================================== -->
+        <!-- Teacher Edit Access (Only their own courses) -->
+        <record id="school_course_rule_teacher_manage" model="ir.rule">
+            <field name="name">School Course: Teacher Edit Own</field>
+            <field name="model_id" ref="model_school_course"/>
+            <field name="domain_force">[('teacher_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('school_group_teacher'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- Manager Full Access -->
+        <record id="school_course_rule_manager" model="ir.rule">
+            <field name="name">School Course: Manager Full Access</field>
+            <field name="model_id" ref="model_school_course"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('school_group_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+
+        <!-- =================================================================
+             2.3 GRADE RECORD RULES
+             ================================================================== -->
+        <!-- Teacher Manage Access (Only for their courses) -->
+        <record id="school_grade_rule_teacher_manage" model="ir.rule">
+            <field name="name">School Grade: Teacher Manage Assigned</field>
+            <field name="model_id" ref="model_school_grade"/>
+            <field name="domain_force">[('course_id.teacher_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('school_group_teacher'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Manager Full Access -->
+        <record id="school_grade_rule_manager" model="ir.rule">
+            <field name="name">School Grade: Manager Full Access</field>
+            <field name="model_id" ref="model_school_grade"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('school_group_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+
+        <!-- =================================================================
+             2.4 ENROLLMENT RECORD RULES
+             ================================================================== -->
+        <!-- User Read Access (Global view) -->
+        <record id="school_enrollment_rule_user_read" model="ir.rule">
+            <field name="name">School Enrollment: User Read All</field>
+            <field name="model_id" ref="model_school_enrollment"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('school_group_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- Teacher Manage Access (Only for their courses) -->
+        <record id="school_enrollment_rule_teacher_manage" model="ir.rule">
+            <field name="name">School Enrollment: Teacher Manage Assigned</field>
+            <field name="model_id" ref="model_school_enrollment"/>
+            <field name="domain_force">[('course_id.teacher_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('school_group_teacher'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Manager Full Access -->
+        <record id="school_enrollment_rule_manager" model="ir.rule">
+            <field name="name">School Enrollment: Manager Full Access</field>
+            <field name="model_id" ref="model_school_enrollment"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('school_group_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+
+        <!-- TODO: Teacher can only edit own courses -->
+        <!-- Hint: domain = [('teacher_id.user_id', '=', user.id)] -->
+        
+        
+        <!-- =================================================================
+        MULTI-COMPANY RULES (OPTIONAL ADVANCED)
+        ================================================================== -->
+        <!--
+        TODO 3 (Advanced): Add Multi-Company Rules
+        
+        If you want to support multi-company:
+        - Add company_id field to models
+        - Create rules that filter by company
+        
+        Example domain: ['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]
+        -->
+        
+    </data>
+</odoo>

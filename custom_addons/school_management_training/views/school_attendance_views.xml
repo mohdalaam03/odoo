@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- =================================================================
+    ATTENDANCE VIEWS
+    ================================================================== -->
+    
+    <!-- Attendance List View -->
+    <record id="view_school_attendance_list" model="ir.ui.view">
+        <field name="name">school.attendance.list</field>
+        <field name="model">school.attendance</field>
+        <field name="arch" type="xml">
+            <list string="Attendance" multi_edit="1" sample="1"
+                  decoration-success="status == 'present'"
+                  decoration-warning="status == 'late'"
+                  decoration-danger="status == 'absent'"
+                  decoration-info="status == 'excused'">
+                <field name="date"/>
+                <!-- TODO: Add student_id, course_id, status -->
+                <!-- TODO: Add check_in, check_out, duration_hours -->
+                <!-- TODO: Add is_excused, remarks -->
+                <field name="student_id"/>
+                <field name="course_id"/>
+                <field name="status"/>
+                <field name="check_in"/>
+                <field name="check_out"/>
+                <field name="duration_hours"/>
+                <field name="is_excused"/>
+                <field name="remarks"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- Attendance Form View -->
+    <record id="view_school_attendance_form" model="ir.ui.view">
+        <field name="name">school.attendance.form</field>
+        <field name="model">school.attendance</field>
+        <field name="arch" type="xml">
+            <form string="Attendance">
+                <sheet>
+                    <group>
+                        <group string="Attendance Details">
+                            <field name="date"/>
+                            <!-- TODO: Add student_id, course_id, status -->
+                            <field name="student_id"/>
+                            <field name="course_id"/>
+                            <field name="status"/>
+                        </group>
+                        <group string="Time">
+                            <!-- TODO: Add check_in, check_out -->
+                            <!-- TODO: Add duration_hours (readonly) -->
+                            <!-- TODO: Add is_on_time (readonly) -->
+                            <field name="check_in"/>
+                            <field name="check_out"/>
+                            <field name="duration_hours" readonly="True"/>
+                            <field name="is_on_time" readonly="True"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <!-- TODO: Add is_excused -->
+                            <field name="is_excused"/>
+                        </group>
+                        <group>
+                            <!-- TODO: Add recorded_by (readonly) -->
+                            <field name="recorded_by" readonly="True"/>
+                        </group>
+                    </group>
+                    <group string="Remarks">
+                        <!-- TODO: Add remarks field -->
+                            <field name="remarks"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Attendance Search View -->
+    <record id="view_school_attendance_search" model="ir.ui.view">
+        <field name="name">school.attendance.search</field>
+        <field name="model">school.attendance</field>
+        <field name="arch" type="xml">
+            <search string="Search Attendance">
+                <field name="date"/>
+                <!-- TODO: Add search fields for student_id, course_id -->
+                <field name="student_id"/>
+                <field name="course_id"/>
+                <!-- Filters -->
+                <filter name="filter_today" string="Today" 
+                        domain="[('date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <!-- TODO: Add filters for status -->
+                <field name="status"/>
+                <separator/>
+                
+                <!-- TODO: Add group by options -->
+                <group expand="0" string="Group By">
+                    <filter string="Student" name="group_by_student" context="{'group_by': 'student_id'}"/>
+                    <filter string="Course" name="group_by_course" context="{'group_by': 'course_id'}"/>
+                    <filter string="Status / Presence" name="group_by_status" context="{'group_by': 'status'}"/>
+                    <filter string="Date" name="group_by_date" context="{'group_by': 'date:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Attendance Calendar View -->
+    <record id="view_school_attendance_calendar" model="ir.ui.view">
+        <field name="name">school.attendance.calendar</field>
+        <field name="model">school.attendance</field>
+        <field name="arch" type="xml">
+            <calendar string="Attendance" date_start="date" color="status" mode="month">
+                <!-- TODO: Add fields to display in calendar -->
+                <field name="student_id"/>
+                <field name="status"/>
+                <field name="check_in"/>
+            </calendar>
+        </field>
+    </record>
+    
+    <!-- Attendance Action -->
+    <record id="action_school_attendance" model="ir.actions.act_window">
+        <field name="name">Attendance</field>
+        <field name="res_model">school.attendance</field>
+        <field name="view_mode">list,calendar,form</field>
+        <field name="search_view_id" ref="view_school_attendance_search"/>
+        <field name="context">{'search_default_filter_today': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Record attendance for today!
+            </p>
+            <p>
+                Use the Bulk Attendance wizard to mark attendance for all students in a course.
+            </p>
+        </field>
+    </record>
+</odoo>

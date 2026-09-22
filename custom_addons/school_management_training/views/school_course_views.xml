@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- =================================================================
+    COURSE VIEWS
+    ================================================================== -->
+    
+    <!-- Course List View -->
+    <record id="view_school_course_list" model="ir.ui.view">
+        <field name="name">school.course.list</field>
+        <field name="model">school.course</field>
+        <field name="arch" type="xml">
+            <list string="Courses" multi_edit="1" sample="1"
+                  decoration-info="state == 'draft'"
+                  decoration-success="state == 'in_progress'"
+                  decoration-muted="state in ('completed', 'cancelled')">
+                <field name="code"/>
+                <!-- TODO: Add name, teacher_id, credits, level -->
+                <!-- TODO: Add enrolled_count, available_seats, state -->
+                <field name="name"/>
+                <field name="teacher_id"/>
+                <field name="credits"/>
+                <field name="level"/>
+                <field name="enrolled_count"/>
+                <field name="available_seats"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- Course Form View -->
+    <record id="view_school_course_form" model="ir.ui.view">
+        <field name="name">school.course.form</field>
+        <field name="model">school.course</field>
+        <field name="arch" type="xml">
+            <form string="Course">
+                <header>
+                    <button name="%(school_management_training.action_bulk_grade_wizard)d" 
+                            string="Bulk Grade Entry" 
+                            type="action" 
+                            class="btn-secondary"
+                            invisible="state == 'draft'"/>
+
+                    <button name="%(school_management_training.action_bulk_attendance_wizard)d" 
+                            string="Bulk Attendance" 
+                            type="action" 
+                            class="btn-secondary" 
+                            invisible="state == 'draft'"
+                            context="{'default_course_id': id, 'active_id': id, 'active_model': 'school.course'}"/>
+
+                            
+                    <!-- TODO: Add state transition buttons -->
+                    <!-- action_plan, action_start, action_complete, action_cancel -->
+                    <button name="action_plan" string="Plan"
+                        type="object" 
+                        class="oe_highlight" 
+                        invisible="state != 'draft'"/>
+                    <button name="action_start" string="Start"
+                        type="object" 
+                        class="oe_highlight"
+                        invisible="state != 'planned'"/>
+                    <button name="action_complete" string="Complete"
+                        type="object" 
+                        class="oe_highlight"
+                        invisible="state != 'in_progress'"/>
+                    <button name="action_cancel" string="Cancel"
+                        type="object" 
+                        class="oe_highlight"/>
+                    <!-- TODO: Add state statusbar -->
+                    <field name="state" widget="statusbar"/>
+                </header>
+                
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <!-- TODO: Add stat buttons for enrollments, grades -->
+                        <!-- Displays the dynamic numeric count on top -->
+                        <button name="action_view_enrollments" type="object">
+                            <div class="o_stat_info">
+                                <field name="enrolled_count" class="o_stat_value"/>
+                                <span class="o_stat_text">Enrollments</span>
+                            </div>
+                        </button>
+
+                        <button name="action_view_grades" type="object">
+                            <div class="o_stat_info">
+                                <field name="grade_count" class="o_stat_value"/>
+                                <span class="o_stat_text">Grades</span>
+                            </div>
+                        </button>
+                    </div>
+                    
+                    <div class="oe_title">
+                        <h1>
+                            <group>
+                                <field name="code" class="me-2" placeholder="e.g. AB-101"/>
+                                <!-- TODO: Add name field -->
+                                <field name="name" placeholder="e.g. Introduction to Test"/>
+                            </group>
+                        </h1>
+                    </div>
+                    
+                    <group>
+                        <group string="Course Details">
+                            <!-- TODO: Add teacher_id, credits, hours_per_week, level -->
+                            <!-- TODO: Add is_mandatory, category_id, tag_ids -->
+                            <field name="teacher_id"/>
+                            <field name="credits"/>
+                            <field name="hours_per_week"/>
+                            <field name="level"/>
+                            <field name="is_mandatory"/>
+                            <field name="category_id"/>
+                            <field name="tag_ids"/>
+                        </group>
+                        <group string="Capacity">
+                            <!-- TODO: Add max_students, min_students -->
+                            <!-- TODO: Add enrolled_count, available_seats (readonly) -->
+                            <field name="max_students"/>
+                            <field name="min_students"/>
+                            <field name="enrolled_count"/>
+                            <field name="available_seats" readonly="True"/>
+                        </group>
+                    </group>
+                    
+                    <group>
+                        <group string="Schedule">
+                            <!-- TODO: Add start_date, end_date -->
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                        </group>
+                        <group string="Prerequisites">
+                            <!-- TODO: Add prerequisite_ids Many2many -->
+                            <field name="prerequisite_ids" 
+                                widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    
+                    <notebook>
+                        <page string="Description" name="description">
+                            <!-- TODO: Add description Html field -->
+                            <field name="description" widget="html" options="{'collaborative': True}"/>
+                        </page>
+                        <page string="Enrollments" name="enrollments">
+                            <!-- TODO: Add enrollment_ids One2many -->
+                            <field name="enrollment_ids">
+                                <!-- Inline list view for quick sub-record viewing and editing -->
+                                <list string="Enrollments" editable="bottom">
+                                    <field name="student_id"/>
+                                    <field name="enrollment_date"/>
+                                    <field name="state" 
+                                        widget="badge" 
+                                        decoration-info="state == 'pending'" 
+                                        decoration-success="state == 'confirmed'" 
+                                        decoration-danger="state == 'dropped'"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Grades" name="grades">
+                            <!-- TODO: Add grade_ids One2many -->
+                            <field name="grade_ids">
+                                <list string="Grades" editable="bottom">
+                                    <field name="student_id"/>
+                                    <field name="score"/>
+                                    <field name="letter_grade" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Course Search View -->
+    <record id="view_school_course_search" model="ir.ui.view">
+        <field name="name">school.course.search</field>
+        <field name="model">school.course</field>
+        <field name="arch" type="xml">
+            <search string="Search Courses">
+                <field name="code"/>
+                <!-- TODO: Add search fields and filters -->
+                <field name="teacher_id"/>
+                <field name="state"/>
+                <field name="category_id"/>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Course Kanban View -->
+    <record id="view_school_course_kanban" model="ir.ui.view">
+        <field name="name">school.course.kanban</field>
+        <field name="model">school.course</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" sample="1" default_group_by="state">
+                <field name="code"/>
+                <!-- TODO: Add more fields -->
+                <field name="id"/>
+                <field name="name"/>
+                <field name="teacher_id"/>
+                <field name="state"/>
+                <progressbar field="state" 
+                             colors='{"draft": "muted", "planned": "info", "in_progress": "success", "completed": "primary", "cancelled": "danger"}'/>
+                <templates>
+                    <t t-name="card">
+                        <!-- Upper Section: Code Badge and Title -->
+                        <div class="d-flex justify-content-between align-items-baseline mb-2">
+                            <span class="badge text-bg-secondary fw-bold px-2 py-1">
+                                <field name="code"/>
+                            </span>
+                            <!-- Clean state tracker alignment dropdown context could sit here -->
+                        </div>
+
+                        <!-- Mid Section: Primary Title Card Layout Header -->
+                        <div class="fs-5 fw-bold text-truncate text-primary mb-1">
+                            <field name="name"/>
+                        </div>
+
+                        <!-- Lower Section: Relationship Context Details Mapping -->
+                        <div class="text-muted small mb-2">
+                            <i class="fa fa-user-tie me-1"/> 
+                            <field name="teacher_id"/>
+                        </div>
+
+                        <!-- Footer Block: Floating Visual Badges -->
+                        <div class="d-flex justify-content-between align-items-center mt-2 border-top pt-2">
+                            <span class="small text-uppercase fw-semibold text-muted">Status:</span>
+                            <field name="state" widget="label_selection" 
+                                   options="{'classes': {'draft': 'default', 'planned': 'info', 'in_progress': 'success', 'completed': 'primary', 'cancelled': 'danger'}}"/>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    
+    <!-- Course Action -->  
+    <record id="action_school_course" model="ir.actions.act_window">
+        <field name="name">Courses</field>
+        <field name="res_model">school.course</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="view_school_course_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first course!
+            </p>
+        </field>
+    </record>
+    
+    
+    <!-- =================================================================
+    COURSE CATEGORY VIEWS
+    ================================================================== -->
+    
+    <record id="view_school_course_category_list" model="ir.ui.view">
+        <field name="name">school.course.category.list</field>
+        <field name="model">school.course.category</field>
+        <field name="arch" type="xml">
+            <list string="Categories">
+                <field name="name"/>
+                <!-- TODO: Add complete_name, course_count -->
+                <field name="complete_name"/>
+                <field name="course_count"/>
+            </list>
+        </field>
+    </record>
+    
+    <record id="view_school_course_category_form" model="ir.ui.view">
+        <field name="name">school.course.category.form</field>
+        <field name="model">school.course.category</field>
+        <field name="arch" type="xml">
+            <form string="Category">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <!-- TODO: Add parent_id -->
+                        <field name="parent_id" options="{'no_create': True, 'no_open': True}"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <record id="action_school_course_category" model="ir.actions.act_window">
+        <field name="name">Course Categories</field>
+        <field name="res_model">school.course.category</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    
+    
+    <!-- =================================================================
+    COURSE TAG VIEWS
+    ================================================================== -->
+    
+    <record id="view_school_course_tag_list" model="ir.ui.view">
+        <field name="name">school.course.tag.list</field>
+        <field name="model">school.course.tag</field>
+        <field name="arch" type="xml">
+            <list string="Tags" editable="bottom">
+                <field name="name"/>
+                <!-- TODO: Add color field with widget="color_picker" -->
+                <field name ="color" widget="color_picker"/>
+            </list>
+        </field>
+    </record>
+    
+    <record id="action_school_course_tag" model="ir.actions.act_window">
+        <field name="name">Course Tags</field>
+        <field name="res_model">school.course.tag</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>

@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- =================================================================
+    STUDENT VIEWS
+    ================================================================== -->
+    <!--
+    TODO 1: Complete the Student Views
+    
+    This file contains view definitions for the school.student model.
+    Views use XML to define the UI structure.
+    
+    Key concepts:
+    - Form views: Detailed view of a single record
+    - List views: Tabular view of multiple records (use <list>, not <tree>)
+    - Search views: Filters and grouping options
+    - Kanban views: Card-based view
+    
+    Important: In Odoo 19+, use <list> instead of <tree> for list views!
+    -->
+    
+    <!-- ================================================================
+    STUDENT LIST VIEW
+    ================================================================= -->
+    <!--
+    TODO: Complete the list view
+    - Add all relevant fields
+    - Add optional_show/hide for less important fields
+    - Add decoration based on state
+    - Make some fields editable inline
+    -->
+    <record id="view_school_student_list" model="ir.ui.view">
+        <field name="name">school.student.list</field>
+        <field name="model">school.student</field>
+        <field name="arch" type="xml">
+            <!-- NOTE: Use <list> not <tree> for Odoo 19 compatibility -->
+            <list string="Students" 
+                  multi_edit="1"
+                  sample="1"
+                  decoration-info="state == 'draft'"
+                  decoration-success="state == 'enrolled'"
+                  decoration-muted="state in ('graduated', 'withdrawn')">
+                <field name="student_code" readonly="1"/>
+                <field name="name"/>
+                <field name="last_name" optional="show"/>
+                <!-- TODO: Add more fields -->
+                <!-- - email (optional="show") -->
+                <field name="email" optional="show"/>
+                <!-- - phone (optional="hide") -->
+                <field name="phone" optional="hide"/>
+                <!-- - date_of_birth (optional="hide") -->
+                <field name="date_of_birth" optional="hide"/>
+                <!-- - age (optional="show") -->
+                <field name="age" optional="show"/>
+                <!-- - guardian_id (optional="hide") -->
+                <field name="guardian_id" optional="hide"/>
+                <!-- - state with widget="badge" -->
+                <field name="state" widget="badge" 
+                       decoration-info="state == 'draft'"
+                       decoration-success="state == 'enrolled'"
+                       decoration-warning="state == 'suspended'"/>
+                <!-- - average_grade with widget="progressbar" (optional) -->
+                <!-- <field name="average_grade" widget="progressbar" optional="show"/> -->
+            </list>
+        </field>
+    </record>
+    
+    <!-- ================================================================
+    STUDENT FORM VIEW
+    ================================================================= -->
+    <!--
+    TODO: Complete the form view with the following structure:
+    - Header with state buttons and status bar
+    - Sheet with:
+      - Photo on the left
+      - Name and code on the right (oe_title)
+      - Notebook with tabs: Personal Info, Courses, Grades, Attendance
+    - Chatter at the bottom
+    -->
+    <record id="view_school_student_form" model="ir.ui.view">
+        <field name="name">school.student.form</field>
+        <field name="model">school.student</field>
+        <field name="arch" type="xml">
+            <form string="Student">
+                <header>
+                    <!-- TODO: Add state transition buttons -->
+                    <!-- 
+                    Example button:
+                    <button name="action_enroll" type="object" 
+                            string="Enroll" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    -->
+                    <button name="action_enroll" type="object" string="Enroll"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <!-- TODO: Add more buttons for other state transitions -->
+                    <button name="action_graduate" type="object" string="Graduate"
+                            class="btn-success" invisible="state != 'enrolled'"/>
+                    <button name="action_suspend" type="object" string="Suspend"
+                            invisible="state != 'enrolled'"/>
+                    <button name="action_withdraw" type="object" string="Withdraw student"
+                            class="btn-danger" invisible="state in ('draft', 'graduated', 'withdrawn')"/>
+                    <button name="action_reset_to_draft" type="object" string="Reset to Draft"
+                            invisible="state != 'withdrawn'"/>
+                    
+                    <!-- Status bar widget -->
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,enrolled,graduated"/>
+                </header>
+                
+                <sheet>
+                    <!-- Ribbon for inactive records -->
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger"
+                            invisible="active"/>
+                    
+                    <div class="oe_button_box" name="button_box">
+                        <!-- TODO: Add stat buttons -->
+                        <!--
+                        Example:
+                        <button name="action_view_enrollments" type="object"
+                                class="oe_stat_button" icon="fa-book">
+                            <field name="total_courses" widget="statinfo" 
+                                   string="Courses"/>
+                        </button>
+                        -->
+                        <button name="action_view_enrollments" type="object"
+                                class="oe_stat_button" icon="fa-book">
+                            <field name="total_courses" widget="statinfo" string="Courses"/>
+                        </button>
+                    </div>
+                    
+                    <!-- Photo and Title Section -->
+                    <field name="photo" widget="image" class="oe_avatar"
+                           options="{'preview_image': 'photo', 'size': [90, 90]}"/>
+                    
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="First Name" class="me-2"/>
+                            <field name="last_name" placeholder="Last Name"/>
+                        </h1>
+                        <field name="student_code"/>
+                    </div>
+                    
+                    <!-- Notebook with Tabs -->
+                    <notebook>
+                        <!-- Personal Information Tab -->
+                        <page string="Personal Information" name="personal_info">
+                            <group>
+                                <group string="Contact Information">
+                                    <!-- TODO: Add contact fields -->
+                                    <!-- email, phone, address -->
+                                    <field name="user_id" options="{'no_create': True}"/>
+                                    <field name="email"/>
+                                    <field name="phone"/>
+                                    <field name="address" placeholder="Street, City, Zip..."/>
+                                </group>
+                                <group string="Personal Details">
+                                    <!-- TODO: Add personal fields -->
+                                    <!-- date_of_birth, age, gender -->
+                                    <field name="date_of_birth"/>
+                                    <field name="age" readonly="1"/>
+                                    <field name="gender"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group string="Guardian Information">
+                                    <!-- TODO: Add guardian_id field -->
+                                    <field name="guardian_id" options="{'no_create': True}"/>
+                                </group>
+                                <group string="Other">
+                                    <field name="active"/>
+                                </group>
+                            </group>
+                            <group string="Notes">
+                                <!-- TODO: Add notes Html field -->
+                                <field name="notes" widget="html" nolabel="1" placeholder="Add custom background or enrollment history logs..."/>
+                            </group>
+                        </page>
+                        
+                        <!-- Courses Tab -->
+                        <page string="Courses" name="courses">
+                            <!-- TODO: Add enrollment_ids One2many field -->
+                            <!--
+                            <field name="enrollment_ids">
+                                <list editable="bottom">
+                                    <field name="course_id"/>
+                                    <field name="enrollment_date"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                            -->
+                            <field name="enrollment_ids">
+                                <list editable="bottom">
+                                    <field name="course_id" options="{'no_create': True}"/>
+                                    <field name="enrollment_date"/>
+                                    <field name="state" widget="badge"
+                                           decoration-info="state == 'pending'"
+                                           decoration-success="state == 'confirmed'"
+                                           decoration-muted="state in ('completed', 'cancelled', 'dropped')"/>
+                                </list>
+                            </field>
+                        </page>
+                        
+                        <!-- Grades Tab -->
+                        <page string="Grades" name="grades">
+                            <!-- TODO: Add grade_ids One2many field -->
+                            <!--
+                            Show grades with course, date, type, score, letter_grade
+                            -->
+                            <field name="grade_ids" readonly="1">
+                                <list string="Grades">
+                                    <field name="course_id"/>
+                                    <field name="date"/>
+                                    <field name="grade_type"/>
+                                    <field name="score"/>
+                                    <field name="letter_grade" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                        
+                        <!-- Attendance Tab -->
+                        <page string="Attendance" name="attendance">
+                            <!-- TODO: Add attendance_ids One2many field -->
+                            <!--
+                            Show attendance with date, course, status, check_in, check_out
+                            -->
+                            <field name="attendance_ids">
+                                <list editable="bottom">
+                                    <field name="date"/>
+                                    <field name="course_id" options="{'no_create': True}"/>
+                                    <field name="status" widget="badge" 
+                                           decoration-success="status == 'present'" 
+                                           decoration-danger="status == 'absent'"/>
+                                    <field name="check_in"/>
+                                    <field name="check_out"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                
+                <!-- Chatter -->
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    
+    <!-- ================================================================
+    STUDENT SEARCH VIEW
+    ================================================================= -->
+    <!--
+    TODO: Complete the search view with:
+    - Search fields for name, code, email
+    - Filters for state, active status, age range
+    - Group by options for state, gender, guardian
+    -->
+    <record id="view_school_student_search" model="ir.ui.view">
+        <field name="name">school.student.search</field>
+        <field name="model">school.student</field>
+        <field name="arch" type="xml">
+            <search string="Search Students">
+                <!-- Search Fields -->
+                <field name="name" string="Name"
+                       filter_domain="['|', ('name', 'ilike', self), ('last_name', 'ilike', self)]"/>
+                <field name="student_code"/>
+                <!-- TODO: Add more search fields -->
+                <field name="email" string="Email Address"/>
+                
+                <!-- Separator -->
+                <separator/>
+                
+                <!-- Filters -->
+                <filter name="filter_draft" string="Draft" 
+                        domain="[('state', '=', 'draft')]"/>
+                <filter name="filter_enrolled" string="Enrolled" 
+                        domain="[('state', '=', 'enrolled')]"/>
+                <!-- TODO: Add more filters -->
+                <filter name="filter_graduated" string="Graduated" 
+                        domain="[('state', '=', 'graduated')]"/>
+                <filter name="filter_withdrawn" string="Withdrawn" 
+                        domain="[('state', '=', 'withdrawn')]"/>
+                
+                <separator/>
+                
+                <filter name="filter_inactive" string="Archived" 
+                        domain="[('active', '=', False)]"/>
+                
+                <!-- Group By -->
+                <group expand="0" string="Group By">
+                    <filter name="groupby_state" string="State" 
+                            context="{'group_by': 'state'}"/>
+                    <!-- TODO: Add more group by options -->
+                    <filter name="groupby_state" string="Status / Lifecycle Stage" 
+                            context="{'group_by': 'state'}"/>
+                    <filter name="groupby_gender" string="Gender" 
+                            context="{'group_by': 'gender'}"/>
+                    <filter name="groupby_guardian" string="Guardian" 
+                            context="{'group_by': 'guardian_id'}"/>
+                    <filter name="groupby_age" string="Age Bracket" 
+                            context="{'group_by': 'age'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <!-- ================================================================
+    STUDENT KANBAN VIEW
+    ================================================================= -->
+    <!--
+    TODO: Complete the kanban view
+    - Show photo, name, state
+    - Add progress bar for average_grade
+    - Show key stats
+    -->
+    <record id="view_school_student_kanban" model="ir.ui.view">
+        <field name="name">school.student.kanban</field>
+        <field name="model">school.student</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" sample="1">
+                <field name="name"/>
+                <field name="student_code"/>
+                <field name="photo"/>
+                <field name="state"/>
+                <!-- TODO: Add more fields -->
+                <field name="email"/>
+                <field name="age"/>
+                <field name="average_grade"/>
+                
+                <templates>
+                    <t t-name="card">
+                        <!-- Left Side -->
+                        <aside>
+                            <field name="photo" widget="image" 
+                                   options="{'preview_image': 'photo', 'size': [60, 60]}"
+                                   class="rounded-circle bg-light border"/>
+                        </aside>
+                        
+                        <!-- Right Side -->
+                        <main class="ps-2">
+                            <div class="fw-bold fs-5 text-primary text-truncate mb-1">
+                                <field name="name"/> <field name="last_name"/>
+                            </div>
+                            
+                            <!-- Sub Block -->
+                            <div class="text-muted small mb-1">
+                                <span class="fw-semibold"><field name="student_code"/></span>
+                                <span class="mx-1">•</span>
+                                <span>Age: <field name="age"/></span>
+                            </div>
+                            
+                            <div class="text-muted small text-truncate mb-2" t-if="record.email.raw_value">
+                                <i class="fa fa-envelope me-1 text-secondary"/> <field name="email"/>
+                            </div>
+                            
+                            <!-- Progress Bar -->
+                            <div class="mb-2" t-if="record.average_grade.raw_value">
+                                <div class="d-flex justify-content-between align-items-center small text-muted mb-1">
+                                    <span>Average Grade:</span>
+                                    <span class="fw-bold text-dark"><t t-esc="record.average_grade.value"/></span>
+                                </div>
+                                <div class="progress" style="height: 6px;" title="GPA Performance Tracker">
+                                    <div class="progress-bar bg-success" 
+                                         role="progressbar" 
+                                         t-attf-style="width: #{record.average_grade.raw_value}%;"
+                                         t-att-aria-valuenow="record.average_grade.raw_value" 
+                                         aria-valuemin="0" 
+                                         aria-valuemax="100"/>
+                                </div>
+                            </div>
+                            
+                            <!-- footer -->
+                            <div class="d-flex justify-content-end align-items-center mt-2 pt-2 border-top">
+                                <field name="state" widget="label_selection"
+                                       options="{'classes': {'draft': 'info', 
+                                                             'enrolled': 'success',
+                                                             'graduated': 'primary',
+                                                             'suspended': 'warning',
+                                                             'withdrawn': 'danger'}}"/>
+                            </div>
+                        </main>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    
+    <!-- ================================================================
+    STUDENT ACTION
+    ================================================================= -->
+    <record id="action_school_student" model="ir.actions.act_window">
+        <field name="name">Students</field>
+        <field name="res_model">school.student</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="view_school_student_search"/>
+        <field name="context">{'search_default_filter_enrolled': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first student!
+            </p>
+            <p>
+                Students can be enrolled in courses, receive grades, and have their attendance tracked.
+            </p>
+        </field>
+    </record>
+</odoo>

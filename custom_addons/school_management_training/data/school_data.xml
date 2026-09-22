@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- =================================================================
+        COURSE CATEGORIES (Default Data)
+        ================================================================== -->
+        <record id="category_sciences" model="school.course.category">
+            <field name="name">Sciences</field>
+        </record>
+        
+        <record id="category_mathematics" model="school.course.category">
+            <field name="name">Mathematics</field>
+        </record>
+        
+        <record id="category_languages" model="school.course.category">
+            <field name="name">Languages</field>
+        </record>
+        
+        <record id="category_arts" model="school.course.category">
+            <field name="name">Arts</field>
+        </record>
+        
+        <record id="category_physical_education" model="school.course.category">
+            <field name="name">Physical Education</field>
+        </record>
+        
+        
+        <!-- =================================================================
+        COURSE TAGS (Default Data)
+        ================================================================== -->
+        <record id="tag_required" model="school.course.tag">
+            <field name="name">Required</field>
+            <field name="color">1</field>
+        </record>
+        
+        <record id="tag_elective" model="school.course.tag">
+            <field name="name">Elective</field>
+            <field name="color">2</field>
+        </record>
+        
+        <record id="tag_advanced" model="school.course.tag">
+            <field name="name">Advanced</field>
+            <field name="color">3</field>
+        </record>
+        
+        <record id="tag_beginner" model="school.course.tag">
+            <field name="name">Beginner Friendly</field>
+            <field name="color">4</field>
+        </record>
+        
+        <record id="tag_online" model="school.course.tag">
+            <field name="name">Online Available</field>
+            <field name="color">5</field>
+        </record>
+    </data>
+</odoo>

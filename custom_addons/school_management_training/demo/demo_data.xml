@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- =================================================================
+        DEMO DATA
+        ================================================================== -->
+        <!--
+        Demo data is loaded when the module is installed with demo data enabled.
+        This provides sample records for testing and demonstration.
+        
+        Note: This data will only load after trainees complete the model definitions.
+        -->
+        
+        <!-- Demo Teachers -->
+        <!--
+        <record id="demo_teacher_1" model="school.teacher">
+            <field name="name">John Smith</field>
+            <field name="email">john.smith@school.edu</field>
+            <field name="department">mathematics</field>
+            <field name="hire_date" eval="datetime.date(2020, 1, 15)"/>
+            <field name="experience_years">10</field>
+        </record>
+        
+        <record id="demo_teacher_2" model="school.teacher">
+            <field name="name">Sarah Johnson</field>
+            <field name="email">sarah.johnson@school.edu</field>
+            <field name="department">science</field>
+            <field name="hire_date" eval="datetime.date(2018, 8, 1)"/>
+            <field name="experience_years">12</field>
+        </record>
+        -->
+        
+        <!-- Demo Courses -->
+        <!--
+        <record id="demo_course_math101" model="school.course">
+            <field name="code">MATH101</field>
+            <field name="name">Introduction to Mathematics</field>
+            <field name="teacher_id" ref="demo_teacher_1"/>
+            <field name="credits">3</field>
+            <field name="level">beginner</field>
+            <field name="max_students">30</field>
+            <field name="is_mandatory" eval="True"/>
+            <field name="category_id" ref="category_mathematics"/>
+        </record>
+        
+        <record id="demo_course_sci101" model="school.course">
+            <field name="code">SCI101</field>
+            <field name="name">General Science</field>
+            <field name="teacher_id" ref="demo_teacher_2"/>
+            <field name="credits">4</field>
+            <field name="level">beginner</field>
+            <field name="max_students">25</field>
+            <field name="category_id" ref="category_sciences"/>
+        </record>
+        -->
+        
+        <!-- Demo Students -->
+        <!--
+        <record id="demo_student_1" model="school.student">
+            <field name="name">Alice</field>
+            <field name="last_name">Brown</field>
+            <field name="email">alice.brown@student.edu</field>
+            <field name="date_of_birth" eval="datetime.date(2005, 3, 15)"/>
+            <field name="gender">female</field>
+            <field name="state">enrolled</field>
+        </record>
+        
+        <record id="demo_student_2" model="school.student">
+            <field name="name">Bob</field>
+            <field name="last_name">Wilson</field>
+            <field name="email">bob.wilson@student.edu</field>
+            <field name="date_of_birth" eval="datetime.date(2004, 7, 22)"/>
+            <field name="gender">male</field>
+            <field name="state">enrolled</field>
+        </record>
+        
+        <record id="demo_student_3" model="school.student">
+            <field name="name">Carol</field>
+            <field name="last_name">Davis</field>
+            <field name="email">carol.davis@student.edu</field>
+            <field name="date_of_birth" eval="datetime.date(2005, 11, 8)"/>
+            <field name="gender">female</field>
+            <field name="state">draft</field>
+        </record>
+        -->
+        
+        <!-- Demo Enrollments -->
+        <!--
+        <record id="demo_enrollment_1" model="school.enrollment">
+            <field name="student_id" ref="demo_student_1"/>
+            <field name="course_id" ref="demo_course_math101"/>
+            <field name="state">confirmed</field>
+        </record>
+        
+        <record id="demo_enrollment_2" model="school.enrollment">
+            <field name="student_id" ref="demo_student_1"/>
+            <field name="course_id" ref="demo_course_sci101"/>
+            <field name="state">confirmed</field>
+        </record>
+        
+        <record id="demo_enrollment_3" model="school.enrollment">
+            <field name="student_id" ref="demo_student_2"/>
+            <field name="course_id" ref="demo_course_math101"/>
+            <field name="state">confirmed</field>
+        </record>
+        -->
+        
+        <!-- Demo Grades -->
+        <!--
+        <record id="demo_grade_1" model="school.grade">
+            <field name="student_id" ref="demo_student_1"/>
+            <field name="course_id" ref="demo_course_math101"/>
+            <field name="grade_type">exam</field>
+            <field name="description">Midterm Exam</field>
+            <field name="score">85</field>
+            <field name="max_score">100</field>
+        </record>
+        
+        <record id="demo_grade_2" model="school.grade">
+            <field name="student_id" ref="demo_student_1"/>
+            <field name="course_id" ref="demo_course_math101"/>
+            <field name="grade_type">quiz</field>
+            <field name="description">Quiz 1</field>
+            <field name="score">18</field>
+            <field name="max_score">20</field>
+        </record>
+        -->
+        
+    </data>
+</odoo>
