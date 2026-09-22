@@ -72,7 +72,6 @@
                 <sheet>
                     <div class="oe_button_box" name="button_box">
                         <!-- TODO: Add stat buttons for enrollments, grades -->
-                        <!-- Displays the dynamic numeric count on top -->
                         <button name="action_view_enrollments" type="object">
                             <div class="o_stat_info">
                                 <field name="enrolled_count" class="o_stat_value"/>
@@ -141,7 +140,6 @@
                         <page string="Enrollments" name="enrollments">
                             <!-- TODO: Add enrollment_ids One2many -->
                             <field name="enrollment_ids">
-                                <!-- Inline list view for quick sub-record viewing and editing -->
                                 <list string="Enrollments" editable="bottom">
                                     <field name="student_id"/>
                                     <field name="enrollment_date"/>
@@ -201,26 +199,21 @@
                              colors='{"draft": "muted", "planned": "info", "in_progress": "success", "completed": "primary", "cancelled": "danger"}'/>
                 <templates>
                     <t t-name="card">
-                        <!-- Upper Section: Code Badge and Title -->
                         <div class="d-flex justify-content-between align-items-baseline mb-2">
                             <span class="badge text-bg-secondary fw-bold px-2 py-1">
                                 <field name="code"/>
                             </span>
-                            <!-- Clean state tracker alignment dropdown context could sit here -->
                         </div>
 
-                        <!-- Mid Section: Primary Title Card Layout Header -->
                         <div class="fs-5 fw-bold text-truncate text-primary mb-1">
                             <field name="name"/>
                         </div>
 
-                        <!-- Lower Section: Relationship Context Details Mapping -->
                         <div class="text-muted small mb-2">
                             <i class="fa fa-user-tie me-1"/> 
                             <field name="teacher_id"/>
                         </div>
 
-                        <!-- Footer Block: Floating Visual Badges -->
                         <div class="d-flex justify-content-between align-items-center mt-2 border-top pt-2">
                             <span class="small text-uppercase fw-semibold text-muted">Status:</span>
                             <field name="state" widget="label_selection" 

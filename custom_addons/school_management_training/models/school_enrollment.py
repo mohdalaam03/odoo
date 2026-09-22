@@ -370,30 +370,25 @@ class SchoolEnrollment(models.Model):
         state_changed = 'state' in vals
         old_states = {record.id: record.state for record in self} if state_changed else {}
 
-        # 1. Execute the base Odoo database save routine first
         result = super().write(vals)
 
-        # 2. Process stage changes and automatic hooks
         if state_changed:
             new_state = vals.get('state')
             for record in self:
                 old_state = old_states.get(record.id)
                 
                 if old_state != new_state:
-                    # Log the enrollment stage shift to the chatter history timeline
                     if hasattr(record, 'message_post'):
                         record.message_post(
                             body=_("Enrollment Stage Changed: From '%s' to '%s'.") % (old_state.upper(), new_state.upper()),
                             subtype_xmlid="mail.mt_note"
                         )
                     
-                    # AUTOMATIC TRIGGER HOOK: Promote student from 'draft' to 'enrolled' if confirmed
                     if new_state == 'confirmed':
                         student = record.student_id
                         if student and student.state == 'draft':
                             student.write({'state': 'enrolled'})
                             
-                            # Log audit note directly onto the promoted student's chatter log timeline
                             if hasattr(student, 'message_post'):
                                 student.message_post(
                                     body=_("Status automatically promoted from 'Draft' to 'Enrolled' upon confirmation in course: %s.") 

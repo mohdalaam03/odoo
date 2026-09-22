@@ -214,7 +214,6 @@ class SchoolCourse(models.Model):
     @api.depends('grade_ids')
     def _compute_grade_count_stat(self):
         for record in self:
-            # Counts the number of total grade records linked to this course
             if getattr(record, 'grade_ids', False):
                 record.grade_count = len(record.grade_ids)
             else:

@@ -97,7 +97,6 @@
         </field>
     </record>
     
-    <!-- Grade Pivot View (for Analysis) -->
     <record id="view_school_grade_pivot" model="ir.ui.view">
         <field name="name">school.grade.pivot</field>
         <field name="model">school.grade</field>
@@ -107,7 +106,7 @@
                 <!-- Row: student_id, Column: course_id, Measure: score (avg) -->
                 <field name="student_id" type="row"/>
                 <field name="course_id" type="col"/>
-                <field name="score" type="measure"/>
+                <field name="percentage" type="measure"/>
             </pivot>
         </field>
     </record>
@@ -120,7 +119,7 @@
             <graph string="Grade Distribution" type="bar" sample="1">
                 <!-- TODO: Configure graph view -->
                 <field name="course_id" type="row"/>
-                <field name="score" type="measure"/>
+                <field name="percentage" type="measure"/>
             </graph>
         </field>
     </record>

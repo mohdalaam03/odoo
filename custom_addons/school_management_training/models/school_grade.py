@@ -53,7 +53,8 @@ class SchoolGrade(models.Model):
     score = fields.Float(
         string='Score',
         required=True,
-        digits=(5, 2)
+        digits=(5, 2),
+        group_operator='avg'
     )
     max_score = fields.Float(
         string='Maximum Score',
@@ -143,7 +144,8 @@ class SchoolGrade(models.Model):
         string='Percentage',
         compute='_compute_percentage',
         store=True,
-        digits=(5, 2),
+        group_operator='avg',
+        digits=(5, 2)
     )
     
     letter_grade = fields.Selection(
@@ -357,11 +359,10 @@ class SchoolGrade(models.Model):
         If it's a standard compute field, self.env.add_to_compute handles it cleanly.
         """
         self.ensure_one()
-        # If letter_grade is an @api.depends compute field, you can force it to clear and re-trigger:
         letter_grade_field = self._fields.get('letter_grade')
         if letter_grade_field and letter_grade_field.compute:
             self.env.add_to_compute(letter_grade_field, self)
-            self._compute_letter_grade()  # Directly calls your existing compute method
+            self._compute_letter_grade()
         return True
 
     def compare_to_class_average(self):
@@ -370,11 +371,9 @@ class SchoolGrade(models.Model):
         Positive means above average, negative means below average.
         """
         self.ensure_one()
-        # 1. Fetch the aggregate dictionary stats for the course
         stats = self.get_grade_statistics()
         class_average = stats.get('average', 0.0)
         
-        # 2. Compare the current record score to the class average (Assuming current field is 'score')
         current_score = getattr(self, 'score', 0.0)
         difference = current_score - class_average
         

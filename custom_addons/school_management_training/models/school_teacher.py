@@ -229,7 +229,7 @@ class SchoolTeacher(models.Model):
         for record in records:
             record.message_post(
                 body=_("Teacher profile successfully created with Employee Code: %s") % record.employee_code,
-                subtype_xmlid="mail.mt_note"  # Posts it as a clean internal log note
+                subtype_xmlid="mail.mt_note" 
             )
             
         return records
