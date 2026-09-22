@@ -52,6 +52,9 @@ See INSTRUCTIONS.md for detailed guidance.
         # Data
         'data/sequence_data.xml',
         'data/school_data.xml',
+
+        # Wizards
+        'wizard/enrollment_wizard_views.xml',
         
         # Views
         'views/school_student_views.xml',
@@ -66,8 +69,6 @@ See INSTRUCTIONS.md for detailed guidance.
         'report/student_report_templates.xml',
         'report/student_reports.xml',
         
-        # Wizards
-        'wizard/enrollment_wizard_views.xml',
     ],
     'demo': [
         'demo/demo_data.xml',
