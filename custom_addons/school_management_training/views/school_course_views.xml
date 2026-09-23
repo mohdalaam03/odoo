@@ -38,14 +38,17 @@
                             string="Bulk Grade Entry" 
                             type="action" 
                             class="btn-secondary"
-                            invisible="state == 'draft'"/>
+                            invisible="state == 'draft'"
+                            groups="school_management_training.school_group_teacher,school_management_training.school_group_manager"/>
 
                     <button name="%(school_management_training.action_bulk_attendance_wizard)d" 
                             string="Bulk Attendance" 
                             type="action" 
                             class="btn-secondary" 
                             invisible="state == 'draft'"
-                            context="{'default_course_id': id, 'active_id': id, 'active_model': 'school.course'}"/>
+                            context="{'default_course_id': id, 'active_id': id, 'active_model': 'school.course'}"
+                            groups="school_management_training.school_group_teacher,school_management_training.school_group_manager"/>
+
 
                             
                     <!-- TODO: Add state transition buttons -->
@@ -53,18 +56,22 @@
                     <button name="action_plan" string="Plan"
                         type="object" 
                         class="oe_highlight" 
-                        invisible="state != 'draft'"/>
+                        invisible="state != 'draft'"
+                        groups="school_management_training.school_group_teacher,school_management_training.school_group_manager"/>
                     <button name="action_start" string="Start"
                         type="object" 
                         class="oe_highlight"
-                        invisible="state != 'planned'"/>
+                        invisible="state != 'planned'"
+                        groups="school_management_training.school_group_teacher,school_management_training.school_group_manager"/>
                     <button name="action_complete" string="Complete"
                         type="object" 
                         class="oe_highlight"
-                        invisible="state != 'in_progress'"/>
+                        invisible="state != 'in_progress'"
+                        groups="school_management_training.school_group_teacher,school_management_training.school_group_manager"/>
                     <button name="action_cancel" string="Cancel"
                         type="object" 
-                        class="oe_highlight"/>
+                        class="oe_highlight"
+                        groups="school_management_training.school_group_teacher,school_management_training.school_group_manager"/>
                     <!-- TODO: Add state statusbar -->
                     <field name="state" widget="statusbar"/>
                 </header>
@@ -210,7 +217,7 @@
                         </div>
 
                         <div class="text-muted small mb-2">
-                            <i class="fa fa-user-tie me-1"/> 
+                            <i class="fa fa-user-tie me-1" title="Teacher"/> 
                             <field name="teacher_id"/>
                         </div>
 

@@ -348,7 +348,7 @@
                             </div>
                             
                             <div class="text-muted small text-truncate mb-2" t-if="record.email.raw_value">
-                                <i class="fa fa-envelope me-1 text-secondary"/> <field name="email"/>
+                                <i class="fa fa-envelope me-1 text-secondary" title="Email"/> <field name="email"/>
                             </div>
                             
                             <!-- Progress Bar -->

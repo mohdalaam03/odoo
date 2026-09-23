@@ -54,7 +54,7 @@ class SchoolGrade(models.Model):
         string='Score',
         required=True,
         digits=(5, 2),
-        group_operator='avg'
+        aggregator='avg'
     )
     max_score = fields.Float(
         string='Maximum Score',
@@ -144,7 +144,7 @@ class SchoolGrade(models.Model):
         string='Percentage',
         compute='_compute_percentage',
         store=True,
-        group_operator='avg',
+        aggregator='avg',
         digits=(5, 2)
     )
     

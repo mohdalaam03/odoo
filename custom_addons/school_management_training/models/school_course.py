@@ -418,7 +418,7 @@ class SchoolCourseCategory(models.Model):
     parent_id = fields.Many2one('school.course.category', string='Parent Category', ondelete='restrict')
     child_ids = fields.One2many('school.course.category', 'parent_id', string='Child Categories')
     parent_path = fields.Char(index=True)
-    complete_name = fields.Char(string='Complete Name', compute='_compute_complete_name', store=True)
+    complete_name = fields.Char(string='Complete Name', compute='_compute_complete_name', store=True, recursive=True)
     course_ids = fields.One2many('school.course', 'category_id', string='Courses')
     course_count = fields.Integer(string='Course Count', compute='_compute_course_count', store=True)
 

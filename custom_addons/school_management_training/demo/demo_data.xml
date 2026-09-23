@@ -12,12 +12,12 @@
         -->
         
         <!-- Demo Teachers -->
-        <!--
+        
         <record id="demo_teacher_1" model="school.teacher">
             <field name="name">John Smith</field>
             <field name="email">john.smith@school.edu</field>
             <field name="department">mathematics</field>
-            <field name="hire_date" eval="datetime.date(2020, 1, 15)"/>
+            <field name="hire_date">2020-01-15</field>
             <field name="experience_years">10</field>
         </record>
         
@@ -25,13 +25,13 @@
             <field name="name">Sarah Johnson</field>
             <field name="email">sarah.johnson@school.edu</field>
             <field name="department">science</field>
-            <field name="hire_date" eval="datetime.date(2018, 8, 1)"/>
+            <field name="hire_date">2018-8-1</field>
             <field name="experience_years">12</field>
         </record>
-        -->
+       
         
         <!-- Demo Courses -->
-        <!--
+        
         <record id="demo_course_math101" model="school.course">
             <field name="code">MATH101</field>
             <field name="name">Introduction to Mathematics</field>
@@ -52,15 +52,15 @@
             <field name="max_students">25</field>
             <field name="category_id" ref="category_sciences"/>
         </record>
-        -->
+       
         
         <!-- Demo Students -->
-        <!--
+        
         <record id="demo_student_1" model="school.student">
             <field name="name">Alice</field>
             <field name="last_name">Brown</field>
             <field name="email">alice.brown@student.edu</field>
-            <field name="date_of_birth" eval="datetime.date(2005, 3, 15)"/>
+            <field name="date_of_birth">2005-03-15</field>
             <field name="gender">female</field>
             <field name="state">enrolled</field>
         </record>
@@ -69,7 +69,7 @@
             <field name="name">Bob</field>
             <field name="last_name">Wilson</field>
             <field name="email">bob.wilson@student.edu</field>
-            <field name="date_of_birth" eval="datetime.date(2004, 7, 22)"/>
+            <field name="date_of_birth">2004-07-22</field>
             <field name="gender">male</field>
             <field name="state">enrolled</field>
         </record>
@@ -78,14 +78,14 @@
             <field name="name">Carol</field>
             <field name="last_name">Davis</field>
             <field name="email">carol.davis@student.edu</field>
-            <field name="date_of_birth" eval="datetime.date(2005, 11, 8)"/>
+            <field name="date_of_birth">2005-11-08</field>
             <field name="gender">female</field>
             <field name="state">draft</field>
         </record>
-        -->
+       
         
         <!-- Demo Enrollments -->
-        <!--
+        
         <record id="demo_enrollment_1" model="school.enrollment">
             <field name="student_id" ref="demo_student_1"/>
             <field name="course_id" ref="demo_course_math101"/>
@@ -103,10 +103,10 @@
             <field name="course_id" ref="demo_course_math101"/>
             <field name="state">confirmed</field>
         </record>
-        -->
+       
         
         <!-- Demo Grades -->
-        <!--
+        
         <record id="demo_grade_1" model="school.grade">
             <field name="student_id" ref="demo_student_1"/>
             <field name="course_id" ref="demo_course_math101"/>
@@ -124,7 +124,7 @@
             <field name="score">18</field>
             <field name="max_score">20</field>
         </record>
-        -->
+       
         
     </data>
 </odoo>

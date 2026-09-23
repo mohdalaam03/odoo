@@ -46,8 +46,8 @@
                 
                 <!-- TODO: Add warning_message field (readonly) -->
                 <group invisible="not warning_message">
-                    <div class="alert alert-warning role='alert' class='mb-0 fw-bold'">
-                        <i class="fa fa-exclamation-triangle me-2"/>
+                    <div class="alert alert-warning role='status' class='mb-0 fw-bold'">
+                        <i class="fa fa-exclamation-triangle me-2" title="Warning"/>
                         <field name="warning_message" readonly="1" nolabel="1"/>
                     </div>
                 </group>
