@@ -2,7 +2,7 @@
 <odoo>
     <data>
         
-        <menuitem id="registration_model_menu_action" name="Training Module"/>
+        <menuitem id="registration_model_menu_action" name="Training Module (Activity 1 &amp; 2)"/>
         
         <menuitem id="reg_sub_menu_action" name="Registration" action="registration_model_action" 
                     parent="registration_model_menu_action"

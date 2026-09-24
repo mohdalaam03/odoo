@@ -9,7 +9,7 @@
 # =============================================================================
 
 {
-    'name': 'School Management Training',
+    'name': 'School Management Training (activity Four)',
     'version': '18.0.1.0.0',
     'category': 'Training',
     'summary': 'A training module to learn Odoo development concepts',

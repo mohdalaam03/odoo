@@ -13,10 +13,10 @@
     - Menu sequence ordering
     - Menu security (groups)
     -->
-    
+        
     <!-- Root Menu (Application) -->
     <menuitem id="menu_school_root"
-              name="School"
+              name="School (Activity 4)"
               web_icon="school_management_training,static/description/icon.png"
               sequence="100"/>
     

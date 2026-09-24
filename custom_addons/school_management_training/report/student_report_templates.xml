@@ -127,7 +127,8 @@
                             <div class="col-4">
                                 <strong>Average Grade:</strong>
                                 <!-- TODO: Add average_grade field -->
-                                <span class="fs-4 fw-bold text-success" t-field="student.average_grade"/>
+                                <span class="fs-4 fw-bold text-success" t-field="student.average_grade" 
+                                    t-options='{"widget": "float", "precision": 2}'/>
                             </div>
                             <div class="col-4">
                                 <strong>Attendance Rate:</strong>

@@ -463,7 +463,7 @@ class SchoolStudent(models.Model):
 
     def action_reset_to_draft(self):
         for record in self:
-            if not self.env.user.has_group('school_management_training.group_school_manager'):
+            if not self.env.user.has_group('school_management_training.school_group_manager'):
                 raise UserError("Only managers can reset to draft.")
             record.state = 'draft'
             record.message_post(body="Student state reset to draft.")
